@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/style.css">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글 수정</title>
+</head>
+<body>
+    <h1>글 수정하기</h1>
+    <form method="POST">
+        제목: <input type="text" name="title" value="{{ post[1] }}"><br>
+
+        내용: <textarea name="content">{{ post[2] }}</textarea><br>
+
+        <input type="submit" value="수정 완료">
+    </form>
+    <br>
+    <button type="button" class="btn-cancel" onclick="location.href='/'">취소</button>
+
+</body>
+</html>

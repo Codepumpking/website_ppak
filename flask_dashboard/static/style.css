@@ -1,0 +1,131 @@
+/* 1. 기본 설정 (폰트, 배경색) */
+body {
+    font-family: 'Noto Sans KR', sans-serif; /* 한글 폰트 */
+    background-color: #f4f7f6; /* 연한 회색 배경 */
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* 2. 전체 레이아웃 컨테이너 */
+.container {
+    max-width: 800px; /* 너무 넓게 퍼지지 않도록 */
+    margin: 0 auto;   /* 화면 중앙 정렬 */
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px; /* 둥근 모서리 */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 그림자 효과 */
+}
+
+/* 3. 제목 및 링크 스타일 */
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 4. 카드 스타일 (게시글 목록) */
+.card {
+    background-color: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: transform 0.2s; /* 마우스 올렸을 때 애니메이션 */
+}
+
+.card:hover {
+    transform: translateY(-3px); /* 살짝 떠오르는 효과 */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+    margin: 0 0 10px 0;
+    color: #34495e;
+}
+
+.card p {
+    color: #666;
+    line-height: 1.5;
+}
+
+.card small {
+    color: #999;
+    display: block;
+    margin-top: 10px;
+    font-size: 0.85em;
+}
+
+/* 5. 입력 폼 스타일 (글쓰기, 수정) */
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; /* 패딩 포함 너비 계산 */
+    font-size: 16px;
+}
+
+textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+/* 6. 버튼 스타일 공통 */
+.btn, input[type="submit"], button {
+    display: inline-block;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+/* 메인 버튼 (글쓰기, 저장 등) */
+.btn-primary, input[type="submit"] {
+    background-color: #3498db; /* 파란색 */
+    color: white;
+}
+.btn-primary:hover, input[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+/* 글쓰기 버튼 전용 (목록 페이지 상단) */
+a.btn {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+}
+
+/* 수정 버튼 */
+.btn-edit{
+    background-color: #4CAF50; 
+    color: white; 
+    padding: 5px 10px; 
+    border-radius: 5px; 
+    font-size: 13.33px; 
+}
+
+/* 취소/삭제 버튼 */
+.btn-cancel {
+    background-color: red;
+    color: white;
+    border: none; 
+    padding: 5px 10px; border-radius: 5px; cursor: pointer;
+}
+
+/*등록 취소 버튼*/
+.btn-cancel-post {
+    background-color: red;
+    color: white;
+    border: none; 
+    padding: 8px 15px; border-radius: 5px; cursor: pointer;
+}
