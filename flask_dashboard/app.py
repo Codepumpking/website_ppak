@@ -9,16 +9,18 @@ Function: Simple Website with CRUD function for text posts
 
 from flask import Flask, render_template, request, redirect, url_for
 import pymysql  #Python MySQL 
+import os
+from dotenv import load_dotenv 
 
 app = Flask(__name__) #Flask 앱 객체 생성
 
 # DB 연결 function (Docker MySQL)
 def get_db_connection():
     return pymysql.connect(
-        host='localhost',
-        user='root',
-        password='1234',    # 실제 서비스 시에는 환경 변수로 숨겨 놓을 것
-        db='board_db',
+        host= os.getenv('DB_HOST'),
+        user=os.getenv('DB_USER'),
+        password= os.getenv('DB_PASSWORD'),    # 실제 서비스 시에는 환경 변수로 숨겨 놓을 것
+        database=os.getenv('DB_NAME'),
         charset='utf8'
     )
 
