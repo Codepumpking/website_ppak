@@ -36,6 +36,32 @@ def post_list():
     conn.close() # 리소스 낭비를 방지하기 위해 연결 종료
     return render_template('list.html', posts=posts)
 
+# 검색 페이지 (Search)
+@app.route('/search')
+def search():
+    # HTML 검색창에서 입력한 단어 가져오기
+    keyword = request.args.get('keyword', '')  # 없으면 빈 문자열
+    search_type = request.args.get('search_type', 'title') # 기본값은 제목
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if search_type == 'content':
+        sql = "SELECT * FROM posts WHERE content LIKE %s"
+        cursor.execute(sql, ('%' + keyword + '%',))
+    elif search_type == 'both':
+        sql = 'SELECT * FROM posts WHERE title LIKE %s OR content LIKE %s'
+        cursor.execute(sql, ('%' + keyword + '%', '%' + keyword + '%'))
+    else:
+        sql = 'SELECT * FROM posts WHERE title LIKE %s'
+        cursor.execute(sql, ('%' + keyword + '%',))
+    
+    results = cursor.fetchall()
+    conn.close()
+
+    return render_template('list.html', posts=results, keyword=keyword, search_type=search_type)
+
+
 # 2. 글쓰기 페이지 (Create)
 @app.route('/write', methods=['GET', 'POST']) 
 # 주소 뒤에 /write가 들어가면 아래 def 함수 실행
