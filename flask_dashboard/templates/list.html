@@ -11,9 +11,9 @@
         <!-- 검색 결과 나누기-->
         {% if keyword %}
             <h1>'{{ keyword }}' 검색 결과</h1>
+            <a href="{{ url_for('post_list')}}" class="btn">전체 목록 보기</a>
         {% else %}
             <h1>자유 게시판</h1>
-            <a href="{{ url_for('post_list')}}" class="btn">전체 목록 보기</a>
         {% endif %}
 
         <div class="search-box" style="margin:20px 0;">
