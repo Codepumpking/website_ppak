@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        
+        <div style="color: #777; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px;">
+            <span>작성자: <strong>{{ post.writer_id }}</strong></span>
+            <span style="float: right;">작성일: {{ post.created_at }}</span>
+        </div>
+
+        {% if post.file_path %}
+            {% set ext = post.file_path.split('.')[-1].lower() %}
+            
+            {% if ext in ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'] %}
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="/static/uploads/{{ post.file_path }}" style="max-width: 100%; border-radius: 8px;">
+                </div>
+            
+            {% else %}
+                <div style="margin-bottom: 20px; padding: 15px; background-color: #f1f3f5; border-radius: 5px; border: 1px solid #ddd;">
+                    <span style="font-size: 1.2em;">📎</span> 
+                    <strong>첨부파일:</strong>
+                    <a href="/static/uploads/{{ post.file_path }}" download style="color: #007bff; text-decoration: underline; margin-left: 5px;">
+                        {{ post.file_path }}
+                    </a>
+                    <span style="font-size: 0.9em; color: gray;">(클릭하여 다운로드)</span>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <div style="white-space: pre-wrap; line-height: 1.6; min-height: 200px;">{{ post.content }}</div>
+
+        <hr>
+
+        <div style="display: flex; justify-content: space-between;">
+            <a href="/" class="btn" style="background-color: #6c757d;">목록으로</a>
+            
+            {% if current_user.is_authenticated and post.writer_id == current_user.id %}
+            <div style="display: flex; gap: 5px;">
+                <a href="{{ url_for('post_edit', id=post.id) }}" class="btn-edit">수정</a>
+                <form action="{{ url_for('post_delete', id=post.id) }}" method="POST">
+                    <button type="submit" class="btn-cancel" onclick="return confirm('삭제하시겠습니까?')">삭제</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

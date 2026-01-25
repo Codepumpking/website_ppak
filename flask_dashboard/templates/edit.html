@@ -2,21 +2,67 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/style.css">    
+    <link rel="stylesheet" href="/static/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>글 수정</title>
 </head>
 <body>
-    <h1>글 수정하기</h1>
-    <form method="POST">
-        제목: <input type="text" name="title" value="{{ post[1] }}"><br>
+    <div class="container">
+        <h1>글 수정하기</h1>
+        
+        <form method="POST" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" name="title" id="title" class="form-input" value="{{ post.title }}" required>
+            </div>
 
-        내용: <textarea name="content">{{ post[2] }}</textarea><br>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea name="content" id="content" class="form-input" rows="10" required>{{ post.content }}</textarea>
+            </div>
 
-        <input type="submit" value="수정 완료">
-    </form>
-    <br>
-    <button type="button" class="btn-cancel" onclick="location.href='/'">취소</button>
+            <div class="form-group">
+                <label for="file">첨부파일 변경:</label>
+                {% if post.file_path %}
+                    <p style="font-size: 0.9em; color: gray; margin: 5px 0;">
+                        현재 파일: <strong>{{ post.file_path }}</strong> (새 파일을 올리면 교체됩니다)
+                    </p>
+                {% endif %}
+                <input type="file" name="file" id="file">
+            </div>
 
+            <div class="secret-option">
+                <label>
+                    <input type="checkbox" name="is_secret" id="secret_check" onclick="togglePassword()" 
+                    {% if post.is_secret == 1 %}checked{% endif %}> 
+                    비밀글로 설정
+                </label>
+                
+                <input type="password" name="post_pw" id="post_pw" placeholder="비밀번호 (4자리)" 
+                       value="{{ post.post_password if post.post_password else '' }}"
+                       {% if post.is_secret == 0 %}disabled{% endif %}>
+            </div>
+
+            <button type="submit" class="btn-primary">수정 완료</button>
+            <button type="button" class="btn-cancel-post" onclick="history.back()">취소</button>
+        </form>
+    </div>
+
+    <script>
+        // 페이지 로딩 시 초기 상태 설정 및 토글 기능
+        function togglePassword() {
+            var checkBox = document.getElementById("secret_check");
+            var pwInput = document.getElementById("post_pw");
+            
+            if (checkBox.checked == true){
+                pwInput.disabled = false;
+                pwInput.required = true; // 체크하면 비밀번호 필수
+            } else {
+                pwInput.disabled = true;
+                pwInput.required = false;
+            }
+        }
+    </script>
 </body>
 </html>

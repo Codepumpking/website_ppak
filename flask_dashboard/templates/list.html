@@ -8,7 +8,18 @@
 </head>
 <body>
     <div class="container">
-        <!-- 검색 결과 나누기-->
+        
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 10px;">
+            {% if current_user.is_authenticated %}
+                <span style="font-weight: bold;">{{ current_user.name }}님</span>
+                <a href="{{ url_for('logout') }}" style="text-decoration: none; color: gray; font-size: 0.9em;">로그아웃</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn" style="background-color: #28a745;">로그인</a>
+                <a href="{{ url_for('register') }}" class="btn" style="background-color: #6c757d;">회원가입</a>
+            {% endif %}
+        </div>
+        <hr>
+
         {% if keyword %}
             <h1>'{{ keyword }}' 검색 결과</h1>
             <a href="{{ url_for('post_list')}}" class="btn">전체 목록 보기</a>
@@ -17,48 +28,61 @@
         {% endif %}
 
         <div class="search-box" style="margin:20px 0;">
-            
-            <!--app.py 에서 search 함수로 전달-->
             <form action="{{ url_for('search')}}" method="GET" style="display:flex; gap:10px; align-items:center"> 
-            <!--드롭다운 메뉴-->
                 <select name="search_type" style="height: 40px; padding:0 10px; border: 1px solid #ddd; border-radius: 4px;">
                     <option value="title" {% if search_type =='title' %}selected{% endif %}>제목</option>
                     <option value="content" {% if search_type == 'content' %}selected{% endif %}>내용</option>
                     <option value="both" {% if search_type == 'both' %}selected{% endif %}>제목+내용</option>
                 </select>
-                
-                <!--검색창-->
-                <input type="text" name="keyword" placeholder="검색어 입력..." value="{{ keyword }}"
-                style="flex: 1; height: 40px; margin:0 0; padding: 0 20px; border: 1px solid #ddd; border-radius: 4px;">
-
-                <!--검색 버튼-->
+                <input type="text" name="keyword" placeholder="검색어 입력..." value="{{ keyword }}" style="flex: 1; height: 40px; padding: 0 20px; border: 1px solid #ddd; border-radius: 4px;">
                 <button type="submit" style="height: 40px; padding: 0 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">검색</button>
             </form>
         </div>
 
         <a href="/write" class="btn">글쓰기</a>
         <hr>
+        
         {% for post in posts %}
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3>{{ post[1] }}</h3>
-
-                <div style="display: flex; gap: 5px;">
-                    
-                    <a href="{{ url_for('post_edit', id=post[0]) }}" class="btn-edit">
-                    수정
-                    </a>
                 
-                    <form action="{{ url_for('post_delete', id=post[0]) }}" method="POST" style="margin: 0;">
-                        <button type="submit" class = "btn-cancel" onclick="return confirm('정말 삭제하시겠습니까?')">            
-                            삭제
-                        </button>
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                    <h3>
+                        {% if post.is_secret == 1 and (not current_user.is_authenticated or post.writer_id != current_user.id) %}
+                            <a href="{{ url_for('check_password_view', post_id=post.id) }}" style="color: #555;">
+                                [비밀글] {{ post.title }}
+                            </a>
+                        
+                        {% else %}
+                            <a href="{{ url_for('post_detail', post_id=post.id) }}">
+                                {% if post.is_secret == 1 %} {% endif %} {{ post.title }}
+                            </a>
+                        {% endif %}
+                    </h3>
+                    
+                    <small style="color: #777; font-size: 0.9em;">by {{ post.writer_id }}</small>
+                </div>
+
+                {% if current_user.is_authenticated and post.writer_id == current_user.id %}
+                <div style="display: flex; gap: 5px;">
+                    <a href="{{ url_for('post_edit', id=post.id) }}" class="btn-edit">수정</a>
+                    <form action="{{ url_for('post_delete', id=post.id) }}" method="POST" style="margin: 0;">
+                        <button type="submit" class="btn-cancel" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
                     </form>
                 </div>
+                {% endif %}
             </div>
 
-            <p>{{ post[2] }}</p>
-            <small>작성일: {{ post[3] }}</small>
+            {% if post.is_secret == 1 and (not current_user.is_authenticated or post.writer_id != current_user.id) %}
+                <p style="color: #aaa; font-style: italic;">비밀글입니다.</p>
+            {% else %}
+                <p>{{ post.content }}</p>
+                {% if post.file_path %}
+                    <br><small>📎 첨부파일 있음</small>
+                {% endif %}
+            {% endif %}
+
+            <small style="color: #999;">작성일: {{ post.created_at }}</small>
             <hr>
         </div>
         {% endfor %}

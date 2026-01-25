@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+</head>
+<body>
+    <h1>로그인</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+
+        <div class="form-group">
+            <label for="email">이메일:</label>
+            <input type="email" id="email" name="email" required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <button type="submit">로그인</button>
+    </form>
+
+    <hr>
+    <p>계정이 없으신가요? <a href="{{ url_for('register') }}">회원가입 하기</a></p>
+    <p><a href="{{ url_for('post_list') }}">메인으로 돌아가기</a></p>
+
+</body>
+</html>
