@@ -359,7 +359,7 @@ def check_password_view(post_id):
             flash('비밀번호가 틀렸습니다.', 'danger')
             return redirect(url_for('check_password_view', post_id=post_id))
 
-    # 2. GET: 처음 들어왔을때
+    # GET: 처음 들어왔을때
     return render_template('check_password.html', post=post)
 
 # 상세 페이지 보기 (일반글 또는 비밀번호 통과 후)
